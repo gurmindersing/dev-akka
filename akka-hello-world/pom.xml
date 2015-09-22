@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.akka.sample</groupId>
+  <artifactId>akka-hello-world</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>akka-hello-world</name>
+  <url>http://akka.io</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+	<groupId>com.typesafe.akka</groupId>
+	<artifactId>akka-actor_2.10</artifactId>
+	<version>2.3.12</version>
+</dependency>
+
+	<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-context</artifactId>
+	<version>4.1.7.RELEASE</version>
+</dependency>
+	<dependency>
+	<groupId>javax.inject</groupId>
+	<artifactId>javax.inject</artifactId>
+	<version>1</version>
+</dependency>
+	
+    
+  </dependencies>
+  <!-- <repositories>
+  	<repository>
+  		<id>typesafe</id>
+  		<name>Typesafe Repository</name>
+  		<url>http://repo.typesafe.com/typesafe/releases</url>
+  	</repository>
+  </repositories> -->
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>ogr.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>2.3.2</version>
+  			<configuration>
+  				<source>1.7</source>
+  				<target>1.7</target>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+</project>
