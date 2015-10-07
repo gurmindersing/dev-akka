@@ -25,6 +25,7 @@ public class HotSwapActor extends UntypedActor{
 				System.out.println("in angry method");
 				getSender().tell("I am already angry",getSelf());
 			}else if(message.equals("foo")){
+				getSender().tell("becoming happy",getSelf());
 				getContext().become(happy);
 			}
 		}
@@ -35,10 +36,15 @@ public class HotSwapActor extends UntypedActor{
 			if(message.equals("bar")){
 				getSender().tell("I am happy now",getSelf());
 			}else if(message.equals("foo")){
+				getSender().tell("becoming angry",getSelf());
 				getContext().become(angry);
 			}
 		}
 	};
+	
+	public void preStart(){
+		System.out.println("starting pre");
+	}
 	
 	
 	/**
@@ -51,8 +57,13 @@ public class HotSwapActor extends UntypedActor{
 		ActorRef actorRef = system.actorOf(Props.create(HotSwapActor.class), "hotSwap");
 		Inbox inbox = Inbox.create(system);
 		inbox.send(actorRef, "bar");
+//		System.out.println(inbox.receive(Duration.create(1, TimeUnit.SECONDS)));
+//		inbox = Inbox.create(system);
+		inbox.send(actorRef, "foo");
 		System.out.println(inbox.receive(Duration.create(1, TimeUnit.SECONDS)));
 //		actorRef.tell("bar", ());
+		inbox.send(actorRef, "foo");
+		System.out.println(inbox.receive(Duration.create(1, TimeUnit.SECONDS)));
 
 	}
 
