@@ -17,6 +17,8 @@ import akka.actor.Identify;
 import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.actor.ReceiveTimeout;
+import akka.actor.TypedActor;
+import akka.actor.TypedActorExtension;
 import akka.actor.UntypedActor;
 import akka.dispatch.Futures;
 import akka.dispatch.Mapper;
@@ -49,6 +51,8 @@ public class AkkaActor extends UntypedActor{
 		ask(actorB,PoisonPill.getInstance(),5000);
 		ask(actorA,"PoisonPill.getInstance()",5000);
 		ask(actorB,"PoisonPill.getInstance()",5000);
+		
+		TypedActorExtension extension = TypedActor.get(system);
 		
 		/*
 		final Future<Result> transformed = aggregate.map(new Mapper<Iterable<Object>,Result>(){
