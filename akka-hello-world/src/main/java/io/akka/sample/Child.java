@@ -46,7 +46,6 @@ public class Child extends UntypedActor{
 		
 	}*/
 	
-	@Override
 	public void preRestart(Throwable cause, Option<Object> msg) {
 	   // do not kill all children, which is the default here
 	}
@@ -55,9 +54,10 @@ public class Child extends UntypedActor{
 	public static void main(String args[]) throws Exception{
 		ActorSystem system = ActorSystem.create("user");
 		Props superprops = Props.create(Supervisor.class);
-		ActorRef supervisor = system.actorOf(superprops, "supervisor");
+		ActorRef supervisor = system.actorOf(superprops.withDispatcher("control-aware-dispatcher"), "supervisor");
 //		ActorRef child = (ActorRef)Await.result(ask(supervisor,Props.create(Child.class)),5000),5000);
-		ActorRef child = (ActorRef)Await.result(ask(supervisor,Props.create(Child.class), 5000), Duration.create(5000,TimeUnit.MILLISECONDS));
+		ActorRef child = ((ActorRef)Await.result(ask(supervisor,Props.create(Child.class), 5000), 
+				Duration.create(5000,TimeUnit.MILLISECONDS)));
 //		child.tell(new Exception(), ActorRef.noSender());
 		child.tell(23, ActorRef.noSender());
 		child.tell("gets", ActorRef.noSender());
