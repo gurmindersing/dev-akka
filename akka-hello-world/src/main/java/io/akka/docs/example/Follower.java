@@ -69,7 +69,7 @@ public class Follower extends UntypedActor{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ActorSystem system = ActorSystem.create("user");
-		system.actorOf(Props.create(Fo, args), name)
+//		system.actorOf(Props.create(Fo, args), name)
 
 	}
 

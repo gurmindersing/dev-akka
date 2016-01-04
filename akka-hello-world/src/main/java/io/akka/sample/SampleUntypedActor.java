@@ -26,7 +26,7 @@ public class SampleUntypedActor extends UntypedActor{
 	public void onReceive(Object message) throws Exception {
 		// TODO Auto-generated method stub
 		if(message instanceof String){
-			getContext().
+//			getContext().
 		}
 	}
 

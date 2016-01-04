@@ -31,7 +31,7 @@ public class WatchActor extends UntypedActor{
 		// TODO Auto-generated method stub
 		
 		ActorSystem system = ActorSystem.create("akka");
-		ActorRef parent = system.actorOf(, name)
+//		ActorRef parent = system.actorOf(, name)
 
 	}
 
