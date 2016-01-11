@@ -43,7 +43,7 @@ public class FileReadActor extends UntypedActor{
 	ActorRef reduceActor = getContext().actorOf(new RoundRobinPool(5).props(Props.create(ReduceActor.class)),
 			"reduceActor");
 	Map<String,Integer> finalMap = new HashMap<String,Integer>();
-	
+	ActorRef finalSender = null;	
 	
 
 	/**
@@ -71,6 +71,7 @@ public class FileReadActor extends UntypedActor{
 	@Override
 	public void onReceive(Object arg0) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println("arg0 sender : "+getSender().path()+" : "+arg0);
 		if(arg0 instanceof BufferedReader){
 			BufferedReader reader = (BufferedReader)arg0;
 			String line;
@@ -79,6 +80,9 @@ public class FileReadActor extends UntypedActor{
 				mapActor.tell(line, getSelf());
 			}
 			mapActor.tell("DISPLAY_LIST", getSelf());
+//			System.out.println("get sender : "+getSender().path());
+			finalSender=getSender();
+			
 		}else if(arg0 instanceof ArrayList){
 			List list=(ArrayList)arg0;
 			System.out.println("sending list to reduce actor :"+list.toArray().toString());
@@ -101,7 +105,8 @@ public class FileReadActor extends UntypedActor{
 			
 		}else if(arg0 instanceof String){
 			System.out.println("final map to send size :: "+finalMap.size());
-			getSender().tell(finalMap, getSelf());
+			System.out.println("getSender() :: "+finalSender.path());
+			finalSender.tell(finalMap, getSelf());
 		}
 		
 		
