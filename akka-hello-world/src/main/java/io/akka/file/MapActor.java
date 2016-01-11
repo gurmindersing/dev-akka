@@ -24,15 +24,21 @@ public class MapActor extends UntypedActor{
 		ArrayList<String> list = new ArrayList<String>();
 		if(arg0 instanceof String){
 			String message = (String)arg0;
-			StringTokenizer st = new StringTokenizer(message);
-			while(st.hasMoreTokens()){
-				list.add(st.nextToken());
+			System.out.println("In map actor :: "+message);
+			if(message.equals("DISPLAY_LIST")){
+				getSender().tell("DISPLAY_LIST", ActorRef.noSender());
+			}else{
+				StringTokenizer st = new StringTokenizer(message);
+				while(st.hasMoreTokens()){
+					list.add(st.nextToken());
+				}
+				getSender().tell(list, ActorRef.noSender());
 			}
 		}else{
 			unhandled(arg0);
 		}
 		
-		getSender().tell(list, ActorRef.noSender());
+		
 		
 	}
 
