@@ -127,12 +127,12 @@ public class FileReadActor extends UntypedActor{
 					if(message.equals("DISPLAY_LIST")){
 						return 2;
 					}else if(message.equals(PoisonPill.getInstance())){
-						return 0;
+						return 3;
 					}else{
-						return 1;
+						return 0;
 					}
 				}
-				
+				 
 			});
 			// TODO Auto-generated constructor stub
 		}
