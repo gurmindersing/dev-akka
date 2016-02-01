@@ -3,15 +3,20 @@
  */
 package io.akka.future;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.dispatch.Filter;
 import akka.dispatch.Futures;
 import akka.dispatch.Mapper;
 import akka.dispatch.OnSuccess;
+import akka.japi.Function;
 import akka.pattern.Patterns;
 import akka.pattern.PipeToSupport.PipeableFuture;
 import akka.util.Timeout;
@@ -51,6 +56,10 @@ public class AkkaFuture {
 		PipeableFuture<Object> pipeableFuture = Patterns.pipe(future, system.dispatcher()).to(actor);
 //		pipeableFuture.
 		futureCall(system);
+//		Promise<String> promise = Futures.promise();
+//		Future<String> theFuture = promise.future();
+//		theFuture.
+		
 //		system.shutdown();
 		
 	}
@@ -60,16 +69,20 @@ public class AkkaFuture {
 		final ExecutionContext ec = system.dispatcher();
 		Future<String> f1 = Futures.future(new Callable<String>(){
 
-			@Override
-			public String call() throws Exception {
+			public String call(){
 				// TODO Auto-generated method stub
-				Thread.sleep(100);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.println("call Thread : "+Thread.currentThread().getId());
 				return "Hello"+"World";
 			}
 			
 		}, ec);
-//		Thread.sleep(100);
+		Thread.sleep(1000);
 		f1.onSuccess(new PrintResult<String>(), ec);
 		System.out.println("main Thread : "+Thread.currentThread().getId());
 		/*Future<Integer> f2 = f1.map(new Mapper<String,Integer>(){
@@ -82,12 +95,11 @@ public class AkkaFuture {
 		
 		Future<Integer> f2 = f1.flatMap(new Mapper<String,Future<Integer>>(){
 //			System.out.println("In map method");
-			public Future<Integer> apply(String s){
-				System.out.println("map Thread : "+Thread.currentThread().getId());
+			public Future<Integer> apply(final String s){
+				System.out.println("flat map Thread : "+Thread.currentThread().getId());
 				return Futures.future(new Callable<Integer>(){
 
-					@Override
-					public Integer call() throws Exception {
+					public Integer call() {
 						// TODO Auto-generated method stub
 						return s.length();
 					}
@@ -100,6 +112,49 @@ public class AkkaFuture {
 		Promise<String> promise = Futures.promise();
 		Future<String> f3 = promise.future();
 //		f3.
+		
+		Future<Integer> future3 = Futures.successful(4);
+		Future<Integer> successfulFilter  = future3.filter(Filter.filterOf(new Function<Integer,Boolean>(){
+
+			public Boolean apply(Integer t) {
+				// TODO Auto-generated method stub
+				System.out.println(t);
+				return t%2 == 0;
+			}
+			
+		}), ec);
+		
+		Future<Integer> failedFilter  = future3.filter(Filter.filterOf(new Function<Integer,Boolean>(){
+
+			public Boolean apply(Integer t) {
+				// TODO Auto-generated method stub
+				System.out.println(t);
+				return t%2 == 0;
+			}
+			
+		}), ec);
+		System.out.println(failedFilter.isCompleted());
+		Future<Integer> failedFilter2  = failedFilter.filter(Filter.filterOf(new Function<Integer,Boolean>(){
+
+			public Boolean apply(Integer t) {
+				// TODO Auto-generated method stub
+				System.out.println(t);
+				return t%2 == 0;
+			}
+			
+		}), ec);
+		
+		Future<Integer> ff1 = Futures.successful(4);
+		Future<Integer> ff2 = Futures.successful(5);
+		Future<Integer> ff3 = Futures.successful(6);
+		
+		List<Future<Integer>> list = new ArrayList<Future<Integer>>();
+//		Iterator<Future<Integer>> iterator = list.iterator();
+		list.add(ff1);list.add(ff2);list.add(ff3);
+		Iterable<Future<Integer>> iterable = list;
+		Future<Iterable<Integer>> futureListOfInts = Futures.sequence(list, ec);
+//		futureListOfInts.map(arg0, arg1)
+		
 		
 	}
 	
