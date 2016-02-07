@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.agent.Agent;
+import akka.dispatch.ExecutionContexts;
 import akka.dispatch.Futures;
 import akka.dispatch.Mapper;
 import akka.dispatch.OnSuccess;
@@ -53,10 +55,25 @@ public class AkkaFuture {
 		futureCall(system);
 //		system.shutdown();
 		
+		agentCall();
+		
 	}
 	
-	public static void futureCall(ActorSystem system) throws InterruptedException{
+	/**
+	 * 
+	 */
+	private static void agentCall() {
+		// TODO Auto-generated method stub
+		ExecutionContext ec = ExecutionContexts.global();
+		Agent<Integer> agent = Agent.create(5,ec);
+		Integer result = agent.get();
+		agent.send(7);
+		System.out.println("agent result:"+agent.get());
 		
+	}
+
+	public static void futureCall(ActorSystem system) throws InterruptedException{
+		System.out.println("in futurecall");
 		final ExecutionContext ec = system.dispatcher();
 		Future<String> f1 = Futures.future(new Callable<String>(){
 
@@ -82,7 +99,7 @@ public class AkkaFuture {
 		
 		Future<Integer> f2 = f1.flatMap(new Mapper<String,Future<Integer>>(){
 //			System.out.println("In map method");
-			public Future<Integer> apply(String s){
+			public Future<Integer> apply(final String s){
 				System.out.println("map Thread : "+Thread.currentThread().getId());
 				return Futures.future(new Callable<Integer>(){
 
