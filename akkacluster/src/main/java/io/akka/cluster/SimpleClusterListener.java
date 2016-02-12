@@ -45,7 +45,8 @@ public class SimpleClusterListener extends UntypedActor {
 
     } else if (message instanceof MemberEvent) {
       // ignore
-
+    	MemberEvent me = (MemberEvent) message;
+    	log.info("Member event: {}", me.member());
     } else {
       unhandled(message);
     }
