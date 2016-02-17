@@ -28,6 +28,7 @@ public class TransformationBackend extends UntypedActor{
 			getSender().tell(new TransformationMessages.TransformationResult(job.getText()), getSelf());
 		}else if(message instanceof CurrentClusterState){
 			CurrentClusterState state = (CurrentClusterState)message;
+			System.out.println("current cluster state");
 			for(Member member:state.getMembers()){
 				if(member.status().equals(MemberStatus.Up)){
 					register(member);
@@ -45,7 +46,7 @@ public class TransformationBackend extends UntypedActor{
 	
 	public void register(Member member){
 		if(member.hasRole("frontend")){
-			getContext().actorSelection(member.address()+"");
+			getContext().actorSelection(member.address()+"/user/frontend").tell(TransformationMessages.BACKEND_REGISTRATION,  getSelf());;
 		}
 	}
 

@@ -1,5 +1,7 @@
 package io.akka.cluster.sample;
 
+import io.akka.cluster.SimpleClusterListener;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,7 +27,8 @@ public class TransformationFrontendMain {
 				withFallback(ConfigFactory.load());
 		
 		ActorSystem system = ActorSystem.create("ClusterSystem", config);
-		
+		ActorRef listener =system.actorOf(Props.create(SimpleClusterListener.class),"frontsimpleclusterlistener");
+		System.out.println("listener front end:"+listener.path().toStringWithoutAddress());
 		final ActorRef frontend = system.actorOf(Props.create(TransformationFrontend.class), "frontend");
 		final FiniteDuration interval = Duration.create(2, TimeUnit.SECONDS);
 		final Timeout timeout = new Timeout(Duration.create(5, TimeUnit.SECONDS));

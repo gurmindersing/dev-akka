@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public interface TransformationMessages {
 	
-	public static class TransformationJob{
+	public static class TransformationJob implements Serializable{
 		public String text;
 		
 		public TransformationJob(String text){
@@ -22,7 +22,7 @@ public interface TransformationMessages {
 		
 	}
 	
-	public static class TransformationResult{
+	public static class TransformationResult implements Serializable{
 		
 		public String result;
 		
@@ -71,6 +71,8 @@ public interface TransformationMessages {
 		
 		
 	}
+	
+	 public static final String BACKEND_REGISTRATION = "BackendRegistration";
 	
 	
 

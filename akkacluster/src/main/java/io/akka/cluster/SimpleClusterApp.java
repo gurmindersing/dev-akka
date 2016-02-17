@@ -9,6 +9,7 @@ import com.typesafe.config.ConfigFactory;
 public class SimpleClusterApp {
 
   public static void main(String[] args) {
+	  System.out.println("SimpleClusterApp::");
     if (args.length == 0)
       startup(new String[] { "2551", "2552", "0" });
     else
