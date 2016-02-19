@@ -11,6 +11,7 @@ import scala.concurrent.duration.FiniteDuration;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.cluster.Cluster;
 import akka.dispatch.OnSuccess;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
@@ -20,7 +21,7 @@ import com.typesafe.config.ConfigFactory;
 
 public class TransformationFrontendMain {
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws InterruptedException{
 		final String port = args.length>0?args[0]:"0";
 		final Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port="+port).
 				withFallback(ConfigFactory.parseString("akka.cluster.roles = [frontend]")).
@@ -52,6 +53,8 @@ public class TransformationFrontendMain {
 			}
 			
 		}, ec);
+		
+		
 		
 	}
 
