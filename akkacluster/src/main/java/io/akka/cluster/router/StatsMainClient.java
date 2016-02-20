@@ -18,7 +18,11 @@ public class StatsMainClient {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ActorSystem system = ActorSystem.create("system");
+		ActorRef worker = system.actorOf(Props.create(StatsWorker.class), "statsWorker");
+		System.out.println((worker.path()));
+		
 		ActorRef statsService = system.actorOf(Props.create(StatsService.class), "statsService");
+		
 		
 		Future<Object> future = Patterns.ask(statsService, "Hello! This is my world.", new Timeout(new FiniteDuration(5, TimeUnit.SECONDS)));
 		StatsResult result = null;

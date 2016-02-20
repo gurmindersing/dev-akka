@@ -29,6 +29,8 @@ public class TransformationBackendMain {
 		System.out.println("listener back end:"+listener.path().toStringWithoutAddress());
 		system.actorOf(Props.create(TransformationBackend.class), "backend");
 		
+		Cluster.get(system);
+		/*
 		Cluster.get(system).registerOnMemberRemoved(new Runnable(){
 			public void run() {
 				
@@ -58,7 +60,7 @@ public class TransformationBackendMain {
 				
 			}
 			
-		});
+		});*/
 		
 		
 //		Thread.sleep(5000);
