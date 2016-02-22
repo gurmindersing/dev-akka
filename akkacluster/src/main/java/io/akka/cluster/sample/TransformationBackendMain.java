@@ -67,7 +67,7 @@ public class TransformationBackendMain {
 //		System.out.println("stopping cluster");
 		Cluster cluster = Cluster.get(system);
 		System.out.println("stopping cluster address::"+cluster.selfAddress().toString());
-		cluster.leave(cluster.selfAddress());
+//		cluster.leave(cluster.selfAddress());
 
 	}
 

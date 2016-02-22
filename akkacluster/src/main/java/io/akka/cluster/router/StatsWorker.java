@@ -17,6 +17,7 @@ public class StatsWorker extends UntypedActor{
 				length=word.length();
 				cache.put(word, length);
 			}
+			System.out.println("sending from stats worker : "+getSender().path().);
 			getSender().tell(length, getSelf());
 		}else{
 			unhandled(message);
