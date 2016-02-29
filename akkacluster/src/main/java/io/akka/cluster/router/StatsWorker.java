@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 
 
 public class StatsWorker extends UntypedActor{
 	Map<String,Integer> cache = new HashMap<String,Integer>();
+	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if(message instanceof String){
@@ -17,7 +20,7 @@ public class StatsWorker extends UntypedActor{
 				length=word.length();
 				cache.put(word, length);
 			}
-			System.out.println("sending from stats worker : "+getSender().path().);
+			log.info("sending from stats worker : "+getSelf().path().address().toString());
 			getSender().tell(length, getSelf());
 		}else{
 			unhandled(message);
