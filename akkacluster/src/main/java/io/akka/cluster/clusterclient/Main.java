@@ -19,9 +19,11 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port="+0).withFallback(ConfigFactory.load("clusterclientworker"));
-		ActorSystem system = ActorSystem.create("service",config);
+		ActorSystem system = ActorSystem.create("cluster",config);
 		
 		ActorRef serviceA = system.actorOf(Props.create(Service.class), "serviceA");
+		
+		System.out.println(serviceA.path().toString());
 		ClusterClientReceptionist.get(system).registerService(serviceA);
 		
 		ActorRef serviceB = system.actorOf(Props.create(Service.class),"serviceB");

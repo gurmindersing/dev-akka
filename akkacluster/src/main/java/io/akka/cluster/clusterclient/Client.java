@@ -33,15 +33,15 @@ public class Client {
 		ActorSystem system = ActorSystem.create("client", config);
 		
 		final ActorRef c = system.actorOf(ClusterClient.props(ClusterClientSettings.create(system).withInitialContacts(initialContacts())), "client");
-		System.out.println("c path : "+c.path().address().toString());
+		System.out.println("c path : "+c.path().toString());
 		c.tell(new ClusterClient.Send("/user/serviceA", "hello",true), ActorRef.noSender());
 		c.tell(new ClusterClient.SendToAll("/user/serviceB", "hi"), ActorRef.noSender());
 		
 	}
 	
 	static Set<ActorPath> initialContacts(){
-		return new HashSet<ActorPath>(Arrays.asList(ActorPaths.fromString("akka.tcp://service@127.0.0.1:2551/service/receptionist"),
-				ActorPaths.fromString("akka.tcp://service@127.0.0.1:2552/service/receptionist")));
+		return new HashSet<ActorPath>(Arrays.asList(ActorPaths.fromString("akka.tcp://cluster@127.0.0.1:2551/service/receptionist"),
+				ActorPaths.fromString("akka.tcp://cluster@127.0.0.1:2552/service/receptionist")));
 	}
 
 }
