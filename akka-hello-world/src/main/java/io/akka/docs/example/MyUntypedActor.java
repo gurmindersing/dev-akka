@@ -4,6 +4,7 @@
 package io.akka.docs.example;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import scala.concurrent.duration.Duration;
 import akka.actor.ActorRef;
@@ -35,7 +36,7 @@ public class MyUntypedActor extends UntypedActor{
 		
 	}
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws TimeoutException{
 		ActorSystem system = ActorSystem.create("akka");
 		ActorRef untypedActor = system.actorOf(Props.create(MyUntypedActor.class));
 		Inbox inbox = Inbox.create(system);

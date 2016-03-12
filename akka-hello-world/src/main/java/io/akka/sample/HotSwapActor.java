@@ -4,6 +4,7 @@
 package io.akka.sample;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import scala.concurrent.duration.Duration;
 import akka.actor.ActorRef;
@@ -49,8 +50,9 @@ public class HotSwapActor extends UntypedActor{
 	
 	/**
 	 * @param args
+	 * @throws TimeoutException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TimeoutException {
 		// TODO Auto-generated method stub
 		System.out.println("hello");
 		ActorSystem system = ActorSystem.create("user");

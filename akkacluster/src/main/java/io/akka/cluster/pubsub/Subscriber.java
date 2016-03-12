@@ -39,6 +39,7 @@ public class Subscriber extends UntypedActor{
 		}else if(message instanceof DistributedPubSubMediator.SubscribeAck){
 			log.info("Subscribing");
 		}else{
+			log.info(message.toString());
 			unhandled(message);
 		}
 		

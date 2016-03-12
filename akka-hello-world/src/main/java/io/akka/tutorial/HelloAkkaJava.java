@@ -5,6 +5,7 @@ package io.akka.tutorial;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import scala.concurrent.duration.Duration;
 import akka.actor.ActorPath;
@@ -60,8 +61,9 @@ public class HelloAkkaJava {
 	
 	/**
 	 * @param args
+	 * @throws TimeoutException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TimeoutException {
 		final ActorSystem system = ActorSystem.create("helloakka");
 		final ActorRef greeter = system.actorOf(Props.create(Greeter.class), "greeter");
 		

@@ -6,6 +6,7 @@ package io.akka.docs.example;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -38,8 +39,9 @@ public class DemoActor extends UntypedActor{
 	
 	/**
 	 * @param args
+	 * @throws TimeoutException 
 	 */
-	public static void main2(String[] args) {
+	public static void main2(String[] args) throws TimeoutException {
 		// TODO Auto-generated method stub
 		
 		ActorSystem system = ActorSystem.create("akka");

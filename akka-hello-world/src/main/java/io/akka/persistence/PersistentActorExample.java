@@ -151,6 +151,7 @@ class ExamplePersistentActor extends UntypedPersistentActor{
 	public void onReceiveRecover(Object msg) throws Exception {
 		// TODO Auto-generated method stub
 		if(msg instanceof Evt){
+			System.out.println();
 			state.update((Evt)msg);
 		}else if(msg instanceof SnapshotOffer){
 			state = (ExampleState)((SnapshotOffer)msg).snapshot();			
@@ -163,7 +164,7 @@ class ExamplePersistentActor extends UntypedPersistentActor{
 }
 
 public class PersistentActorExample{
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		final ActorSystem system = ActorSystem.create("example",ConfigFactory.load("persistence"));
 		final ActorRef persistentActor = system.actorOf(Props.create(ExamplePersistentActor.class), "persistentActor-4-java");
 		
@@ -174,6 +175,9 @@ public class PersistentActorExample{
 		persistentActor.tell(new Cmd("buzz"), ActorRef.noSender());
 		persistentActor.tell("print", ActorRef.noSender());
 		
+		Thread.sleep(1000);
+		
+		system.terminate();
 		
 		
 	}

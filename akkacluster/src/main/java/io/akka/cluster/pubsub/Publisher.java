@@ -44,7 +44,7 @@ public class Publisher extends UntypedActor{
 		
 		ActorSystem system = ActorSystem.create("ClusterSystem", config);
 		ActorRef publisher = system.actorOf(Props.create(Publisher.class), "publisher");
-		publisher.tell("Publish this!", publisher);
+		publisher.tell("Publish this!", null);
 	
 	}
 
