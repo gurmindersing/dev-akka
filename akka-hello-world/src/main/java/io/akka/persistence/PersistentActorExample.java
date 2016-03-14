@@ -6,13 +6,18 @@ package io.akka.persistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import com.typesafe.config.ConfigFactory;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
+import akka.persistence.Persistence;
+import akka.persistence.RecoveryCompleted;
 import akka.persistence.SnapshotOffer;
 import akka.persistence.UntypedPersistentActor;
 
@@ -93,6 +98,8 @@ class ExampleState implements Serializable{
 }
 
 class ExamplePersistentActor extends UntypedPersistentActor{
+	
+	LoggingAdapter log = Logging.getLogger(getContext().system(),this);
 
 	/* (non-Javadoc)
 	 * @see akka.persistence.PersistenceIdentity#persistenceId()
@@ -137,7 +144,8 @@ class ExamplePersistentActor extends UntypedPersistentActor{
 		}else if(msg.equals("snap")){
 			saveSnapshot(state.copy());
 		}else if(msg.equals("print")){
-			System.out.println(state);
+			log.info("print : "+state);
+//			Persistence.get(getContext().system()).de;
 		}else{
 			unhandled(msg);
 		}
@@ -150,11 +158,15 @@ class ExamplePersistentActor extends UntypedPersistentActor{
 	@Override
 	public void onReceiveRecover(Object msg) throws Exception {
 		// TODO Auto-generated method stub
-		if(msg instanceof Evt){
-			System.out.println();
+		log.info("msg : "+msg.toString());
+		if(msg instanceof RecoveryCompleted){
+			log.info("Recovery completed");
+		}else if(msg instanceof Evt){
+			log.info("onreceiverecover evt : "+((Evt)msg).getData());
 			state.update((Evt)msg);
 		}else if(msg instanceof SnapshotOffer){
-			state = (ExampleState)((SnapshotOffer)msg).snapshot();			
+			state = (ExampleState)((SnapshotOffer)msg).snapshot();
+			log.info("snapshotoffer state : "+state.toString());
 		}else{
 			unhandled(msg);
 		}
