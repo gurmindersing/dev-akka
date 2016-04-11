@@ -59,6 +59,7 @@ public class LookupActor extends UntypedActor{
 	
 	Procedure<Object> active = new Procedure<Object>(){
 		public void apply(Object message){
+			System.out.println("in active() : "+message);
 			if(message instanceof Op.MathOp){
 				System.out.println("to calc");
 				calculator.tell(message, getSelf());
@@ -66,13 +67,16 @@ public class LookupActor extends UntypedActor{
 		        Op.AddResult result = (Op.AddResult) message;
 		        System.out.printf("Add result: %d + %d = %d\n", result.getN1(),
 		            result.getN2(), result.getResult());
+		        getContext().stop(getSender());
 
 		      } else if (message instanceof Op.SubtractResult) {
 		        Op.SubtractResult result = (Op.SubtractResult) message;
 		        System.out.printf("Sub result: %d - %d = %d\n", result.getN1(),
 		            result.getN2(), result.getResult());
+		        getContext().stop(getSender());
 
 		      } else if(message instanceof Terminated){
+		    	  System.out.println("terminated calc");
 		    	  sendIndentifyRequest();
 		    	  getContext().unbecome();
 		      }else{

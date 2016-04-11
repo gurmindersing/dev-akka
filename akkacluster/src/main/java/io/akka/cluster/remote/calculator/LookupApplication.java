@@ -21,17 +21,21 @@ public class LookupApplication {
 	
 		
 	public static void main(String[] args) {
-		startRemoteWorkerSystem();
-		startRemoteLookupSystem("akka.tcp://CalculatorWorkerSystem@127.0.0.1:2552");
+		if (args.length == 0 || args[0].equals("Calculator"))
+		    startRemoteCalculatorSystem();
+		if (args.length == 0 || args[0].equals("Lookup"))
+		    startRemoteLookupSystem();
 	}
 	
-	public static void startRemoteWorkerSystem(){
-		ActorSystem.create("CalculatorWorkerSystem", ConfigFactory.load("calculator"));
-	}
-	
-	public static void startRemoteLookupSystem(String path){
-		ActorSystem system = ActorSystem.create("RemoteLookupSystem", ConfigFactory.load("remotelookup"));
+	public static void startRemoteCalculatorSystem(){
+		ActorSystem system = ActorSystem.create("CalculatorWorkerSystem", ConfigFactory.load("calculator"));
+		system.actorOf(Props.create(CalculatorActor.class), "calculator");
 		
+	}
+	
+	public static void startRemoteLookupSystem(){
+		ActorSystem system = ActorSystem.create("RemoteLookupSystem", ConfigFactory.load("remotelookup"));
+		String path = "akka.tcp://CalculatorWorkerSystem@127.0.0.1:2552/user/calculator";
 		final ActorRef actor = system.actorOf(Props.create(LookupActor.class,path), "lookupActor");
 		System.out.println("Started lookup system");
 		
