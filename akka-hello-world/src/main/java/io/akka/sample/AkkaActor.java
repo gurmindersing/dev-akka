@@ -24,12 +24,14 @@ import akka.dispatch.Futures;
 import akka.dispatch.Mapper;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import akka.pattern.CircuitBreaker;
 
 public class AkkaActor extends UntypedActor{
 	{
 //		final ActorRef myChild = getContext().actorOf(Props.create(AkkaActor.class),"childActor");
 	}
 	LoggingAdapter log =  Logging.getLogger(getContext().system(), this);
+	CircuitBreaker breaker;
 
 	public static void main2(String[] args) {
 		// TODO Auto-generated method stub
@@ -73,12 +75,18 @@ public class AkkaActor extends UntypedActor{
 
 	}
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws InterruptedException{
 		ActorSystem system = ActorSystem.create("user");
 		ActorRef actorA = system.actorOf(Props.create(Manager.class), "actorA");
 		ask(actorA,"job",2000);
-		ask(actorA,"shutdown",2000);
-		ask(actorA,"job",2000);
+//		ask(actorA,"shutdown",2000);
+		
+		
+		system.scheduler().schedule(Duration.Zero(), Duration.create(50, TimeUnit.MILLISECONDS), 
+				actorA,"Tick", system.dispatcher(),null);
+		Thread.sleep(500);
+		System.out.println("before ");
+//		ask(actorA,system,2000);
 	}
 	
 	@Override
@@ -119,6 +127,9 @@ public class AkkaActor extends UntypedActor{
 //			Thread.sleep(5000);
 			getSender().tell("retruned:"+message, getSelf());
 //			throw new Exception();
+			this.breaker=new CircuitBreaker(getContext().dispatcher(), getContext().system().scheduler(), 5, 
+					Duration.create(10, TimeUnit.SECONDS), Duration.create(1, TimeUnit.MINUTES));
+			
 		}else if (message instanceof ReceiveTimeout) {
 		      // To turn it off
 			log.info("timeout catch");

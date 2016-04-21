@@ -4,7 +4,6 @@
 package io.akka.sample;
 
 import static akka.pattern.Patterns.gracefulStop;
-
 import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.Await;
@@ -38,6 +37,11 @@ public class Manager extends UntypedActor {
 	      worker.tell(PoisonPill.getInstance(), getSelf());
 	      System.out.println("getContext().sender():"+getContext().sender());
 	      getContext().become(shuttingDown);
+	    }else if(message instanceof ActorSystem){
+	    	System.out.println(" shut down system");
+	    	((ActorSystem)message).shutdown();
+	    }else{
+	    	System.out.println("tick:");
 	    }
 	  }
 	  
