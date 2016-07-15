@@ -46,7 +46,7 @@ public class Subscriber extends UntypedActor{
 	}
 	public static void main(String[] args) {
 		if (args.length == 0)
-		      startup(new String[] { "2551", "2552", "0" });
+		      startup(new String[] { "2552"});
 		
 		
 	}
@@ -64,6 +64,7 @@ public class Subscriber extends UntypedActor{
 
         // Create an Akka system
         ActorSystem system = ActorSystem.create("ClusterSystem", config);
+        ActorRef cluster = system.actorOf(Props.create(SimpleClusterListener.class), "cluster");
         system.actorOf(Props.create(Subscriber.class), "subscriber1");
         system.actorOf(Props.create(Subscriber.class), "subscriber2");
         system.actorOf(Props.create(Subscriber.class), "subscriber3");
