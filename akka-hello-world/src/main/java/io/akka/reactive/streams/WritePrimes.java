@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ThreadLocalRandom;
 
+import akka.Done;
 import akka.NotUsed;
 import akka.actor.ActorSystem;
 import akka.stream.ActorMaterializer;
@@ -38,9 +39,12 @@ public class WritePrimes {
 		final int maxRandomNumberSize = 1000000;
 		final Source<Integer,NotUsed> source = Source.from(new RandomIterable(maxRandomNumberSize)).filter(WritePrimes::isPrime).filter(prime->isPrime(prime+2));
 		
-		 Sink<ByteString, CompletionStage<IOResult>> output = FileIO.toFile(new File("primes.txt"));
+		Sink<ByteString, CompletionStage<IOResult>> output = FileIO.toFile(new File("primes.txt"));
 		 
-		 Object slowSink = Flow.of(Integer.class).map(i->{Thread.sleep(1000);return ByteString.from(i.toString());}).toMat(output,Keep.right());
+		Sink<Integer, CompletionStage<IOResult>> slowSink = Flow.of(Integer.class).map(i->{Thread.sleep(1000);return ByteString.fromString(i.toString());}).toMat(output,Keep.right());
+		Sink<Integer, CompletionStage<Done>> consoleSink = Sink.<Integer>foreach(System.out::println);
+		
+		 
 
 	}
 	

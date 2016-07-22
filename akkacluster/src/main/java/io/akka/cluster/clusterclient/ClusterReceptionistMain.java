@@ -15,10 +15,10 @@ import akka.cluster.client.ClusterClientReceptionist;
  * @author gurmi
  *
  */
-public class Main {
+public class ClusterReceptionistMain {
 	public static void main(String[] args) {
 		
-		Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port="+0).withFallback(ConfigFactory.load("clusterclientworker"));
+		Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port="+2552).withFallback(ConfigFactory.load("clusterreceptionist"));
 		ActorSystem system = ActorSystem.create("cluster",config);
 		
 		ActorRef serviceA = system.actorOf(Props.create(Service.class), "serviceA");
@@ -28,6 +28,7 @@ public class Main {
 		
 		ActorRef serviceB = system.actorOf(Props.create(Service.class),"serviceB");
 		ClusterClientReceptionist.get(system).registerService(serviceB);
+		System.out.println(serviceB.path().toString());
 	}
 
 }
